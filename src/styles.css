@@ -4440,6 +4440,356 @@ a {
     font-size: 23px;
   }
 }
+/* Ultrawide desktops: use the extra width while keeping both grids in view. */
+@media (min-width: 2200px) and (min-aspect-ratio: 2/1) {
+  .app-shell {
+    --wide-board: clamp(420px, calc(100dvh - 790px), 720px);
+    max-width: 2800px;
+    margin-inline: auto;
+  }
+  .rail {
+    left: max(0px, calc((100vw - 2800px) / 2));
+    width: 112px;
+  }
+  .brand-mark {
+    width: 58px;
+    height: 58px;
+    margin-top: 25px;
+  }
+  .rail-button {
+    width: 84px;
+    height: 82px;
+    gap: 10px;
+  }
+  .rail-button span {
+    font-size: 16px;
+  }
+  .workspace {
+    max-width: none;
+    margin-left: 112px;
+    padding-inline: 48px;
+  }
+  .topbar {
+    height: 112px;
+  }
+  .wordmark {
+    font-size: 36px;
+  }
+  .topbar-tagline,
+  .save-status,
+  .account-button {
+    font-size: 16px;
+  }
+  .account-button {
+    max-width: 280px;
+  }
+  .content-layout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 48px;
+    padding-top: 28px;
+  }
+  .main-content {
+    padding-bottom: 20px;
+  }
+  .hero {
+    min-height: 212px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 52px;
+    line-height: 1.2;
+  }
+  .hero p {
+    font-size: 18px;
+  }
+  .hero-art {
+    width: 230px;
+    margin-right: 28px;
+  }
+  .eyebrow,
+  .art-caption {
+    font-size: 13px;
+  }
+  .hero-battle {
+    min-height: 112px;
+    margin-bottom: 20px;
+  }
+  .hero-battle h1 {
+    font-size: 42px;
+    margin-top: 12px;
+  }
+  .mode-switch button,
+  .rules-button,
+  .primary-button,
+  .secondary-button {
+    font-size: 18px;
+  }
+  .mode-switch button {
+    padding: 14px 24px;
+  }
+  .panel-heading {
+    padding: 18px 40px;
+  }
+  .panel-heading h2,
+  .board-heading h3,
+  .battle-boards .board-heading h3,
+  .control-title h3 {
+    font-size: 20px;
+  }
+  .status-pill,
+  .step-number,
+  .board-heading > span,
+  .battle-boards .board-heading > span,
+  .control-title > span,
+  .board-caption,
+  .battle-boards .board-caption {
+    font-size: 15px;
+  }
+  .setup-layout {
+    grid-template-columns: minmax(0, var(--wide-board)) minmax(300px, 380px);
+    justify-content: center;
+    gap: clamp(64px, 5vw, 172px);
+    padding: 0 64px 26px;
+    align-items: center;
+  }
+  .setup-board {
+    max-width: var(--wide-board);
+  }
+  .board-top-labels,
+  .board-side-labels {
+    font-size: 15px;
+  }
+  .board-top-labels {
+    height: 30px;
+    grid-template-columns: 26px 1fr;
+  }
+  .board-middle {
+    grid-template-columns: 26px 1fr;
+  }
+  .board-caption {
+    margin-left: 26px;
+  }
+  .control-hint {
+    font-size: 16px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+  }
+  .fleet-option {
+    padding: 20px 16px;
+    font-size: 18px;
+    gap: 20px;
+  }
+  .fleet-count {
+    font-size: 16px;
+  }
+  .mini-ship {
+    width: 84px;
+  }
+  .mini-ship i {
+    width: 16px;
+    height: 16px;
+  }
+  .placement-actions .secondary-button,
+  .shuffle-button {
+    padding: 16px;
+    font-size: 18px;
+  }
+  .placement-tip p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .launch-area {
+    padding: 22px 40px;
+  }
+  .difficulty-label > span,
+  .difficulty-label > p {
+    font-size: 16px;
+  }
+  .difficulty-picker > button {
+    padding: 15px 20px;
+    font-size: 18px;
+  }
+  .start-button {
+    width: 240px;
+    padding: 17px 24px;
+  }
+  .battle-boards {
+    padding: 0 40px;
+    gap: 64px;
+  }
+  .battle-boards > div {
+    width: 100%;
+    max-width: var(--wide-board);
+    justify-self: center;
+  }
+  .turn-banner {
+    margin: 0 40px 20px;
+    padding: 12px 20px;
+  }
+  .turn-banner strong {
+    font-size: 18px;
+  }
+  .turn-banner small {
+    font-size: 15px;
+  }
+  .battle-footer {
+    padding: 20px 40px;
+  }
+  .battle-metrics strong {
+    font-size: 24px;
+  }
+  .battle-metrics span,
+  .autosave-note,
+  .log-label,
+  .below-game,
+  .below-game .text-button {
+    font-size: 15px;
+  }
+  .battle-log {
+    padding: 18px 40px;
+  }
+  .below-game {
+    padding-block: 12px;
+  }
+  .battle-log p,
+  .log-empty {
+    font-size: 16px !important;
+  }
+  .match-clock > strong {
+    font-size: 32px;
+  }
+  .match-clock > span {
+    font-size: 14px;
+  }
+  .headquarters-heading,
+  .commander-name > span,
+  .commander-stats span,
+  .commander-login,
+  .commander-synced,
+  .mission-progress-label,
+  .coach-tag {
+    font-size: 15px;
+  }
+  .commander-card {
+    padding: 32px 28px 0;
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .commander-name h2,
+  .mission-card h3 {
+    font-size: 20px;
+  }
+  .commander-stats strong {
+    font-size: 28px;
+  }
+  .commander-login,
+  .commander-synced {
+    padding-block: 20px;
+  }
+  .mission-card,
+  .coach-card {
+    padding: 28px;
+    margin-top: 24px;
+  }
+  .mission-card > .eyebrow {
+    font-size: 12px;
+  }
+  .mission-card p,
+  .coach-card p,
+  .sidebar-note p,
+  .coach-card > button {
+    font-size: 17px;
+  }
+  .coach-card h3 {
+    font-size: 24px;
+  }
+  .coach-card p {
+    max-width: 280px;
+  }
+  .coach-card > button {
+    padding-bottom: 0;
+  }
+  .sidebar-footer {
+    font-size: 12px;
+  }
+  .modal {
+    width: min(680px, calc(100vw - 48px));
+    padding: 36px;
+  }
+  .modal-title h2,
+  .empty-state h3 {
+    font-size: 24px;
+  }
+  .modal-description,
+  .account-form label,
+  .account-note,
+  .rules-list p,
+  .rules-extra p {
+    font-size: 16px;
+  }
+  .account-form input,
+  .room-form input,
+  .join-form input {
+    font-size: 18px;
+  }
+  .history-stats {
+    padding: 30px 40px;
+  }
+  .history-stats strong {
+    font-size: 36px;
+  }
+  .history-stats > div > span,
+  .small-muted,
+  .match-description > small,
+  .match-description > strong > span,
+  .match-accuracy span,
+  .theme-option > small,
+  .pro-activation span {
+    font-size: 15px;
+  }
+  .history-panel .panel-heading,
+  .match-list {
+    padding-inline: 40px;
+  }
+  .history-panel .panel-heading h2,
+  .match-description > strong,
+  .match-accuracy strong,
+  .theme-section h2,
+  .pro-features h3 {
+    font-size: 20px;
+  }
+  .empty-state {
+    padding-block: 64px;
+  }
+  .empty-state p,
+  .account-nudge strong,
+  .account-nudge p,
+  .account-nudge .text-button,
+  .pro-panel > p,
+  .pro-features p,
+  .pro-activation strong,
+  .pro-activation .primary-button,
+  .theme-option > strong {
+    font-size: 18px;
+  }
+  .match-item {
+    padding-block: 24px;
+  }
+  .pro-panel {
+    padding: 40px;
+  }
+  .pro-panel > h2 {
+    font-size: 34px;
+  }
+  .pro-features {
+    gap: 48px;
+  }
+  .theme-preview {
+    height: 180px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *:before,

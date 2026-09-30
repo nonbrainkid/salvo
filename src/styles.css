@@ -4553,7 +4553,7 @@ a {
     align-items: center;
   }
   .setup-board {
-    max-width: var(--wide-board);
+    max-width: calc(var(--wide-board) - 40px);
   }
   .board-top-labels,
   .board-side-labels {

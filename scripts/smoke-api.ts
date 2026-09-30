@@ -14,22 +14,43 @@ let requests = 0;
 class Player {
   private cookie = "";
   async request(path: string, body?: unknown, expected = 200) {
-    const response = await fetch(new URL(path, base), {
-      method: body === undefined ? "GET" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: base,
-        ...(this.cookie ? { Cookie: this.cookie } : {}),
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      signal: AbortSignal.timeout(20_000),
-    });
-    requests++;
-    const setCookie = response.headers.get("set-cookie");
-    if (setCookie) this.cookie = setCookie.split(";")[0];
-    const data = await response.json();
-    assert.equal(response.status, expected, `${path}: ${JSON.stringify(data)}`);
-    return data;
+    for (let attempt = 0; ; attempt++) {
+      const response = await fetch(new URL(path, base), {
+        method: body === undefined ? "GET" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: base,
+          ...(this.cookie ? { Cookie: this.cookie } : {}),
+        },
+        body: body === undefined ? undefined : JSON.stringify(body),
+        signal: AbortSignal.timeout(20_000),
+      });
+      requests++;
+      const setCookie = response.headers.get("set-cookie");
+      if (setCookie) this.cookie = setCookie.split(";")[0];
+      const data = await response.json();
+      // A simulated match can issue shots much faster than a person. Respect the
+      // production rate limit instead of weakening it for the verification script.
+      if (response.status === 429 && expected !== 429 && attempt < 2) {
+        const retrySeconds = Math.min(
+          60,
+          Math.max(1, Number(response.headers.get("retry-after")) || 60),
+        );
+        console.log(
+          `Rate limit respected; retrying in ${retrySeconds} seconds.`,
+        );
+        await new Promise((resolve) =>
+          setTimeout(resolve, retrySeconds * 1000),
+        );
+        continue;
+      }
+      assert.equal(
+        response.status,
+        expected,
+        `${path}: ${JSON.stringify(data)}`,
+      );
+      return data;
+    }
   }
   room(body: object) {
     return this.request("/api/room", body) as Promise<RoomView>;

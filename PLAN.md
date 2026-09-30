@@ -18,7 +18,7 @@
 
 - React + TypeScript + Vite; Vercel Functions; Neon Postgres (бесплатный тариф, если доступен).
 - Агент игрового движка: `src/game`, `tests/game*`.
-- Агент интерфейса: `src/App.tsx`, `src/components`, `src/styles.css`.
+- Агент интерфейса: `src/App.tsx`, `src/styles.css`.
 - Агент backend: `server`, `api`, `tests/server*`.
 - Основной агент: общие контракты, клиент API/сохранения, интеграция, инфраструктура, QA, документация и деплой.
 
@@ -28,7 +28,7 @@
 
 Движок (`src/game/engine.ts`): `randomFleet(rng?)`, `validateFleet(fleet) -> {valid,error?}`, `shipCells(start,size,orientation) -> number[] | null`, `canPlaceShip(fleet,start,size,orientation) -> boolean`, `fireAt(fleet,shots,cell) -> FireResult`, `chooseBotShot(shots,difficulty,rng?) -> number`, `analyzeGame(shots,durationMs) -> CoachReport`, `coordinate(cell) -> string`. Экспорт `FLEET_SIZES` и `BOARD_SIZE`.
 
-API: `GET /api/account` -> AccountState; `POST /api/account` action `register` (username,password,displayName), `login` (username,password), `logout`, `sync` (history,savedGame,proDemo), ответы AccountState. HttpOnly cookie.
+API: `GET /api/account` -> AccountState; `POST /api/account` action `register` (username,password,displayName), `login` (username,password), `logout`, `sync` (history,savedGame,proDemo,clearSavedGameId?), ответы AccountState. HttpOnly cookie. Явный идентификатор удаляемой партии защищает новое сохранение от старой вкладки.
 
 API: `GET /api/room?code=...` -> RoomView; `POST /api/room` action `create` (name), `join` (code,name), `place` (code,fleet), `fire` (code,cell), ответы RoomView. Гостевые cookie для доступа. Неавторизованный зритель не получает флот. Ошибки JSON `{error:string}` с подходящим HTTP статусом. `GET /api/health` показывает только доступность сервиса.
 

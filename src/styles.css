@@ -446,6 +446,9 @@ a {
 }
 .setup-board {
   min-width: 0;
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
 }
 .board-heading {
   display: flex;

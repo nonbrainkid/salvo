@@ -18,7 +18,7 @@
 }
 body {
   margin: 0;
-  min-width: 340px;
+  min-width: 320px;
 }
 button,
 input {
@@ -3596,6 +3596,10 @@ a {
     font-size: 12px;
     margin-top: 12px;
     margin-left: 17px;
+    flex-wrap: wrap;
+  }
+  .board-caption > span {
+    white-space: normal;
   }
   .ship-segment {
     height: 56%;
@@ -3660,7 +3664,8 @@ a {
   .fleet-count {
     position: absolute;
     right: 5px;
-    bottom: 9px;
+    top: 9px;
+    bottom: auto;
     font-size: 12px;
   }
   .fleet-count > svg {
@@ -3949,7 +3954,7 @@ a {
     gap: 7px;
   }
   .room-form input {
-    font-size: 12px;
+    font-size: 16px;
   }
   .room-form .primary-button {
     font-size: 14px;
@@ -3961,7 +3966,7 @@ a {
   }
   .join-form input {
     max-width: 48%;
-    font-size: 12px;
+    font-size: 16px;
     padding: 11px 9px;
   }
   .join-form .text-button {
@@ -4331,7 +4336,7 @@ a {
     font-size: 12px;
   }
   .account-form input {
-    font-size: 12px;
+    font-size: 16px;
   }
   .coach-report > h3 {
     font-size: 20px;
@@ -4368,8 +4373,7 @@ a {
     font-size: 25px;
   }
   .hero-art {
-    width: 98px;
-    margin-right: -10px;
+    display: none;
   }
   .hero p {
     font-size: 14px;
@@ -4385,6 +4389,17 @@ a {
   }
   .fleet-option {
     font-size: 14px;
+  }
+  .fleet-picker {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .setup-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mode-switch button {
+    padding-inline: 10px;
+    white-space: nowrap;
   }
   .mini-ship i {
     width: 8px;

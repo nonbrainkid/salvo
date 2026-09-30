@@ -272,7 +272,10 @@ function readInitialProfiles() {
   const owner = initialOwner();
   return { owner, previous: readProfile(owner), guest: readProfile(null) };
 }
-function mergeProfiles(local: LocalProfile, remote: LocalProfile): LocalProfile {
+function mergeProfiles(
+  local: LocalProfile,
+  remote: LocalProfile,
+): LocalProfile {
   let savedGame = local.savedGame;
   if (
     remote.savedGame &&
@@ -281,7 +284,8 @@ function mergeProfiles(local: LocalProfile, remote: LocalProfile): LocalProfile 
         ? savedGame.playerShots.length + savedGame.botShots.length <
           remote.savedGame.playerShots.length + remote.savedGame.botShots.length
         : savedGame.startedAt < remote.savedGame.startedAt))
-  ) savedGame = remote.savedGame;
+  )
+    savedGame = remote.savedGame;
   return {
     history: mergeHistory(local.history, remote.history),
     savedGame,
@@ -569,8 +573,12 @@ function App() {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   // An account's cached data is loaded only after the server confirms its identity.
   const [initialProfiles] = useState(readInitialProfiles);
-  const [game, setGame] = useState<SoloGame | null>(initialProfiles.guest.savedGame);
-  const [history, setHistory] = useState<MatchRecord[]>(initialProfiles.guest.history);
+  const [game, setGame] = useState<SoloGame | null>(
+    initialProfiles.guest.savedGame,
+  );
+  const [history, setHistory] = useState<MatchRecord[]>(
+    initialProfiles.guest.history,
+  );
   const [proDemo, setProDemo] = useState(initialProfiles.guest.proDemo);
   const [storageFailed, setStorageFailed] = useState(false);
   const [theme, setTheme] = useState<BoardTheme>(() => {
@@ -598,10 +606,12 @@ function App() {
   const accountReady = useRef(false);
   const accountRevision = useRef(0);
   const localOwner = useRef<string | null>(null);
-  const cachedProfiles = useRef(new Map<string | null, LocalProfile>([
-    [initialProfiles.owner, initialProfiles.previous],
-    [null, initialProfiles.guest],
-  ]));
+  const cachedProfiles = useRef(
+    new Map<string | null, LocalProfile>([
+      [initialProfiles.owner, initialProfiles.previous],
+      [null, initialProfiles.guest],
+    ]),
+  );
   const syncQueue = useRef<Promise<void>>(Promise.resolve());
   const syncVersion = useRef(0);
   const pendingClearId = useRef<string | undefined>(undefined);
@@ -623,15 +633,18 @@ function App() {
       pendingClearId.current = undefined;
       cachedProfiles.current.set(previousOwner, local);
       if (!saveLocal(profileKey(previousOwner), local)) setStorageFailed(true);
-      const target = cachedProfiles.current.get(nextOwner) ?? readProfile(nextOwner);
-      local = previousOwner === null && nextOwner !== null
-        ? mergeProfiles(local, target)
-        : target;
+      const target =
+        cachedProfiles.current.get(nextOwner) ?? readProfile(nextOwner);
+      local =
+        previousOwner === null && nextOwner !== null
+          ? mergeProfiles(local, target)
+          : target;
       // A guest can take their own games into an account once. After sign-out,
       // the guest profile is empty instead of inheriting another user's games.
       if (previousOwner === null && nextOwner !== null) {
         cachedProfiles.current.set(null, emptyProfile());
-        if (!saveLocal(profileKey(null), emptyProfile())) setStorageFailed(true);
+        if (!saveLocal(profileKey(null), emptyProfile()))
+          setStorageFailed(true);
       }
       if (previousOwner !== null) {
         setRoom(null);
@@ -675,7 +688,8 @@ function App() {
     // Preserve the old version's account cache before updating legacy mirrors.
     let saved = true;
     for (const [owner, profile] of cachedProfiles.current) {
-      if (owner !== localOwner.current) saved = saveLocal(profileKey(owner), profile) && saved;
+      if (owner !== localOwner.current)
+        saved = saveLocal(profileKey(owner), profile) && saved;
     }
     const profile = { history, savedGame: game, proDemo };
     cachedProfiles.current.set(localOwner.current, profile);
@@ -696,22 +710,39 @@ function App() {
     const timer = window.setTimeout(() => {
       // Serialize writes and discard superseded queued snapshots.
       syncQueue.current = syncQueue.current.then(async () => {
-        if (revision !== accountRevision.current || version !== syncVersion.current) return;
+        if (
+          revision !== accountRevision.current ||
+          version !== syncVersion.current
+        )
+          return;
         try {
           const clearSavedGameId = pendingClearId.current;
-          await api.syncAccount({ history, savedGame: game, proDemo, clearSavedGameId });
-          if (revision === accountRevision.current && pendingClearId.current === clearSavedGameId)
+          await api.syncAccount({
+            history,
+            savedGame: game,
+            proDemo,
+            clearSavedGameId,
+          });
+          if (
+            revision === accountRevision.current &&
+            pendingClearId.current === clearSavedGameId
+          )
             pendingClearId.current = undefined;
-          if (revision === accountRevision.current && version === syncVersion.current)
+          if (
+            revision === accountRevision.current &&
+            version === syncVersion.current
+          )
             setCloud("synced");
         } catch (cause) {
           if (revision !== accountRevision.current) return;
           if (cause instanceof api.ApiError && cause.status === 401) {
             mergeAccount({ user: null, ...emptyProfile() });
-            setNotice("Сессия завершилась. Войди снова, чтобы открыть свой прогресс.");
+            setNotice(
+              "Сессия завершилась. Войди снова, чтобы открыть свой прогресс.",
+            );
           } else if (version === syncVersion.current) setCloud("error");
         }
-        });
+      });
     }, 800);
     return () => window.clearTimeout(timer);
   }, [game, history, proDemo, user, pending, mergeAccount]);
@@ -1070,15 +1101,22 @@ function App() {
       await syncQueue.current;
       let cloudSaved = false;
       try {
-        await api.syncAccount({ ...currentProfile.current, clearSavedGameId: pendingClearId.current });
+        await api.syncAccount({
+          ...currentProfile.current,
+          clearSavedGameId: pendingClearId.current,
+        });
         cloudSaved = true;
-      } catch { /* The account-specific local copy remains available after login. */ }
+      } catch {
+        /* The account-specific local copy remains available after login. */
+      }
       const account = await api.logout();
       mergeAccount(account);
       setModal(null);
-      setNotice(cloudSaved
-        ? "Выход выполнен. История остаётся в твоём аккаунте."
-        : "Выход выполнен. Облачное сохранение не подтверждено — локальный прогресс вернётся после входа.");
+      setNotice(
+        cloudSaved
+          ? "Выход выполнен. История остаётся в твоём аккаунте."
+          : "Выход выполнен. Облачное сохранение не подтверждено — локальный прогресс вернётся после входа.",
+      );
     } catch (cause) {
       setAccountError((cause as Error).message);
     } finally {
@@ -1161,20 +1199,20 @@ function App() {
                 storageFailed
                   ? "Браузер не смог сохранить локальную копию. Освободи место или разреши хранение данных."
                   : cloud === "error"
-                  ? "Нет связи с сервером. Прогресс сохранён на этом устройстве."
-                  : cloud === "synced"
-                    ? "Сохранено в аккаунте"
-                    : "Прогресс сохраняется на этом устройстве"
+                    ? "Нет связи с сервером. Прогресс сохранён на этом устройстве."
+                    : cloud === "synced"
+                      ? "Сохранено в аккаунте"
+                      : "Прогресс сохраняется на этом устройстве"
               }
             >
               <span />
               {storageFailed && cloud !== "synced" && cloud !== "syncing"
                 ? "Не сохранено"
                 : cloud === "syncing"
-                ? "Сохраняем…"
-                : cloud === "synced"
-                  ? "В облаке"
-                  : "На устройстве"}
+                  ? "Сохраняем…"
+                  : cloud === "synced"
+                    ? "В облаке"
+                    : "На устройстве"}
             </span>
             <button
               className="account-button"
@@ -1189,7 +1227,17 @@ function App() {
             </button>
           </div>
         </header>
-        {storageFailed && <div className="storage-warning" role="status"><Info size={18} /><p>Локальная копия не сохранена. Разреши хранение данных или освободи место в браузере.{cloud !== "synced" && " Не закрывай вкладку, чтобы не потерять текущую партию."}</p></div>}
+        {storageFailed && (
+          <div className="storage-warning" role="status">
+            <Info size={18} />
+            <p>
+              Локальная копия не сохранена. Разреши хранение данных или освободи
+              место в браузере.
+              {cloud !== "synced" &&
+                " Не закрывай вкладку, чтобы не потерять текущую партию."}
+            </p>
+          </div>
+        )}
         <div className="content-layout">
           <main id="main-content" className="main-content">
             {page === "play" && (
@@ -1751,8 +1799,16 @@ function App() {
                           </button>
                         ) : (
                           <span className="autosave-note">
-                            {storageFailed && cloud !== "synced" ? <Info size={14} /> : <Check size={14} />}
-                            {cloud === "synced" ? "Сохранено в аккаунте" : storageFailed ? "Копия не сохранена" : "Сохранено на устройстве"}
+                            {storageFailed && cloud !== "synced" ? (
+                              <Info size={14} />
+                            ) : (
+                              <Check size={14} />
+                            )}
+                            {cloud === "synced"
+                              ? "Сохранено в аккаунте"
+                              : storageFailed
+                                ? "Копия не сохранена"
+                                : "Сохранено на устройстве"}
                           </span>
                         )}
                       </div>

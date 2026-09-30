@@ -66,7 +66,7 @@ npm audit --omit=dev
 | --- | --- | --- |
 | Правила и бот | `src/game/engine.ts` | Чистые функции без React, DOM и базы данных |
 | Общие типы | `src/shared/contracts.ts` | Состояние партии, выстрелы, история, ответы API |
-| Интерфейс | `src/App.tsx`, `src/components`, `src/styles.css` | Расстановка, игра, аккаунт, статистика и Pro |
+| Интерфейс | `src/App.tsx`, `src/styles.css` | Расстановка, игра, аккаунт, статистика и Pro |
 | API-клиент | `src/lib/client.ts` | Запросы с таймаутами и понятными ошибками |
 | Сервер | `server`, `api` | Авторизация, проверка онлайн-ходов, хранение |
 | Деплой | `vercel.json` | Статический клиент и Vercel Functions |

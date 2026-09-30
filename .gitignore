@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vercel/
+.env*
+!.env.example
+coverage/
+artifacts/
+*.log
+.DS_Store
+.agents/
+skills-lock.json
+output/
+.playwright-cli/

@@ -1,0 +1,11 @@
+node_modules
+.git
+artifacts
+tests
+*.docx
+.env*
+.agents
+skills-lock.json
+output
+.playwright-cli
+PLAN.md
